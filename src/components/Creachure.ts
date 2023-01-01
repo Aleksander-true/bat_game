@@ -17,20 +17,21 @@ export default class Creachure {
   animationSpeed: number;
   gameFrame: number;
 
-  constructor(imageId: string, gameWidth: number, gameHeight: number) {
+  constructor(imageSrc: string, gameWidth: number, gameHeight: number, framesNumber: number, animationSpeed = 0.4) {
     this.gameWidth = gameWidth;
     this.gameHeight = gameHeight;
-    this.width = this.gameWidth * 0.05;
-    this.height = this.gameHeight * 0.075;
     this.x = 0;
     this.y = 0;
-    this.image = document.getElementById(imageId) as HTMLImageElement;
+    this.image = new Image();
+    this.image.src = imageSrc;
     this.frame = 0;
-    this.framesNumber = 6;
-    this.imageWidth = 360 / this.framesNumber;
-    this.imageHeight = 44;
+    this.framesNumber = framesNumber;
+    this.imageWidth = this.image.width / this.framesNumber;
+    this.imageHeight = this.image.height;
+    this.width = this.gameWidth * 0.05;
+    this.height = this.width * (this.imageHeight / this.imageWidth);
     this.speed = 10;
-    this.animationSpeed = 0.4;
+    this.animationSpeed = animationSpeed;
     this.gameFrame = 0;
   }
 

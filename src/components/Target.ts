@@ -8,8 +8,8 @@ export default class Target extends Creachure {
   newY: number;
   isCatched: boolean;
 
-  constructor(imageId: string, gameWidth: number, gameHeight: number) {
-    super(imageId, gameWidth, gameHeight);
+  constructor(imageId: string, gameWidth: number, gameHeight: number, framesNumber: number) {
+    super(imageId, gameWidth, gameHeight, framesNumber);
     this.x = Math.random() > 0.5 ? this.gameWidth : -this.width;
     this.y = Math.random() * (this.gameHeight - this.height);
     this.newX = Math.random() * (this.gameWidth - this.width);
