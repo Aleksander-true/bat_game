@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 import Boom from './Boom';
+import loseText from './loseText';
+import { modal, Modal } from './modal/Modal';
 import Player from './Player';
 import scoreText from './scoreText';
 import Target from './Target';
+import timeText from './timeText';
 import winText from './winText';
 
 export default class App {
@@ -15,8 +18,12 @@ export default class App {
   score: number;
   timeStart: number;
   booms: Boom[];
+  secondsForLevel: number;
+  timeOfLastCreateTarget: number;
+  modal: Modal;
 
   constructor() {
+    this.modal = modal;
     this.canvasWidth = 2000;
     this.canvasHeight = 1200;
     this.targets = [];
@@ -34,59 +41,64 @@ export default class App {
     this.bite.load();
     this.score = 0;
     this.timeStart = Date.now();
+    this.timeOfLastCreateTarget = this.timeStart;
+    this.secondsForLevel = 10;
   }
 
-  start() {
-    const animate = () => {
-      this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-      this.player.draw(this.ctx);
-      this.player.update(this.targets);
+  start():void {
+    this.animate();
+  }
 
-      this.targets.forEach((target, i) => {
-        if (target.isCatched) {
-          this.targets.splice(i, 1);
-          this.bite.currentTime = 0;
-          this.bite.play();
-          this.addBoom(target);
-          this.score++;
-        } else {
-          target.draw(this.ctx);
-          target.update(this.player);
-        }
-      });
+  animate():void {
+    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.player.draw(this.ctx);
+    this.player.update(this.targets);
 
-      this.booms.forEach((boom, i) => {
-        if (boom.isFinish) {
-          this.booms.splice(i, 1);
-        } else {
-          boom.draw(this.ctx);
-          boom.update();
-        }
-      });
-
-      scoreText(this.ctx, this.score, this.targets.length);
-      const currentTime = Date.now();
-      if ((currentTime - this.timeStart) >= 8000) {
-        this.timeStart = currentTime;
-        this.createTargets(1);
-      }
-      if (!this.targets.length) {
-        winText(this.ctx, this.canvasWidth, this.canvasHeight);
+    this.targets.forEach((target, i) => {
+      if (target.isCatched) {
+        this.targets.splice(i, 1);
+        this.bite.currentTime = 0;
+        this.bite.play();
+        this.addBoom(target);
+        this.score++;
       } else {
-        requestAnimationFrame(animate);
+        target.draw(this.ctx);
+        target.update(this.player);
       }
-    };
+    });
 
-    animate();
+    this.booms.forEach((boom, i) => {
+      if (boom.isFinish) {
+        this.booms.splice(i, 1);
+      } else {
+        boom.draw(this.ctx);
+        boom.update();
+      }
+    });
+
+    const currentTime = Date.now();
+    scoreText(this.ctx, this.score, this.targets.length);
+    const isTimeUp = timeText(this.ctx, this.secondsForLevel, this.timeStart, currentTime);
+    if ((currentTime - this.timeOfLastCreateTarget) >= 8000) {
+      this.timeOfLastCreateTarget = currentTime;
+      this.createTargets(1);
+    }
+    if (this.targets.length && !isTimeUp) {
+      requestAnimationFrame(this.animate.bind(this));
+    } else if (isTimeUp) {
+      loseText(this.ctx);
+    } else {
+      winText(this.ctx);
+    }
   }
 
-  createTargets(quntity:number) {
-    for (let i = 0; i < quntity; i++) {
+  createTargets(quantity:number):void {
+    for (let i = 0; i < quantity; i++) {
       this.targets.push(new Target('enemy_fly.png', this.canvasWidth, this.canvasHeight, 6));
     }
   }
 
-  addBoom(target:Target) {
+  addBoom(target:Target):void {
     this.booms.push(new Boom('boom.png', this.canvasWidth, this.canvasHeight, 5, target));
   }
 }

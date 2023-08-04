@@ -18,7 +18,7 @@ export default class Target extends Creachure {
     this.isCatched = false;
   }
 
-  update(player: Player) {
+  update(player: Player):void {
     const widthRange = (this.gameWidth - this.width);
     const heigthRange = (this.gameHeight - this.height);
     if (this.gameFrame % (this.speed * 4) === 0) {

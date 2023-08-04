@@ -1,13 +1,16 @@
+@import './components/modal/_modal.scss';
+
 * {
   box-sizing: border-box;
 }
 
 body {
+  position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content:space-around;
+  justify-content: flex-start;
   background-color: darkslategrey;
   color: white;
   text-transform: uppercase;
@@ -15,6 +18,8 @@ body {
 }
 
 canvas {
+  max-width: 100vw;
+  max-height: calc(100vh - 5rem);
   background-color: #fff;
   border: 1px #fff solid;
   background-image: url('../public/Forest.jpg');
