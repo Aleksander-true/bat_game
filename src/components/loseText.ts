@@ -5,5 +5,5 @@ export default function loseText(context: CanvasRenderingContext2D): void {
   context.fillStyle = 'red';
   context.fillRect(0, (height / 2) - 120, width, 200);
   context.fillStyle = 'yellow';
-  context.fillText('ВЫ ПРОИГРАЛИ!', 600, height / 2 + 30);
+  context.fillText('ПОРАЖЕНИЕ!', 600, height / 2 + 30);
 }

@@ -1,4 +1,5 @@
 @import './components/modal/_modal.scss';
+@import './components/Buttons/_button.scss';
 
 * {
   box-sizing: border-box;
@@ -15,6 +16,7 @@ body {
   color: white;
   text-transform: uppercase;
   margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 canvas {
@@ -24,6 +26,27 @@ canvas {
   border: 1px #fff solid;
   background-image: url('../public/Forest.jpg');
   background-size: cover;
+  cursor: crosshair;
+  
+
+  &.level-2{
+    background-image: url('../public/2.jpg');
+  }
+  &.level-3{
+    background-image: url('../public/3.jpg');
+  }
+  &.level-4{
+    background-image: url('../public/4.jpg');
+  }
+  &.level-5{
+    background-image: url('../public/5.jpg');
+  }
+  &.level-6{
+    background-image: url('../public/6.jpg');
+  }
+  &.level-7{
+    background-image: url('../public/7.jpg');
+  }
 }
 
 .player_img,

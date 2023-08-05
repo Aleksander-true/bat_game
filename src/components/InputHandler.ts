@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 export default class InputHandler {
-  kyes: Set<string>;
+  keys: Set<string>;
+  isMouseControl: boolean;
+  mouse: { x: number, y: number };
 
   constructor() {
-    this.kyes = new Set();
+    this.keys = new Set();
+    this.isMouseControl = false;
     document.addEventListener('keydown', (e) => {
       if (
         e.key === 'ArrowDown'
@@ -10,7 +14,8 @@ export default class InputHandler {
         || e.key === 'ArrowLeft'
         || e.key === 'ArrowRight'
       ) {
-        this.kyes.add(e.key);
+        this.isMouseControl = false;
+        this.keys.add(e.key);
       }
     });
 
@@ -21,8 +26,20 @@ export default class InputHandler {
         || e.key === 'ArrowLeft'
         || e.key === 'ArrowRight'
       ) {
-        this.kyes.delete(e.key);
+        this.keys.delete(e.key);
       }
+    });
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target && target.id === 'canvas') {
+        this.isMouseControl = true;
+      }
+    });
+    this.mouse = { x: 0, y: 0 };
+    document.addEventListener('mousemove', (e) => {
+      this.mouse.x = e.clientX;
+      this.mouse.y = e.clientY;
     });
   }
 }
